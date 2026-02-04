@@ -8,7 +8,7 @@
 [![Google Drive](https://img.shields.io/badge/Google%20Drive-Test_Dataset-blue)](https://drive.google.com/file/d/1Ma2g1oSzl8ya0A-wJXMhPHekGLPqlvnW/view?usp=sharing) 
 
 <p align="center">
-  <img src="./imgs/figure1.png" alt="Figure 1. Qualitative example of the use-case for contextual visual personalization in VLMs. Note that our CoViP effectively responds to the question while integrating the mentioned personal details from the given multimodal contexts." width="80%">
+  <img src="./imgs/figure1.png" alt="Figure 1. Qualitative example of the use-case for contextual visual personalization in VLMs. Note that our CoViP effectively responds to the question while integrating the mentioned personal details from the given multimodal contexts." width="100%">
 </p>
 
 
