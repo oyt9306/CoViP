@@ -1,6 +1,6 @@
 # Contextualized Visual Personalization in Vision-Language Models
 
-### Yeongtak Oh*, Sangwon Yu*, Junsung Park, Han Cheol Moon, Jisoo Mok, Sungroh Yoon
+* **Authors**: Yeongtak Oh*, Sangwon Yu*, Junsung Park, Han Cheol Moon, Jisoo Mok, Sungroh Yoon
 
 [![arXiv](https://img.shields.io/badge/arXiv-2506.18369-b31b1b.svg)]() 
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-CoViP_Model-yellow)](https://huggingface.co/Yeongtak/CoViP-Qwen3-VL-8B-GSPO) 
