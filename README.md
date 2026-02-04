@@ -40,3 +40,32 @@ After generating the captions, execute the porting script for the vLLM environme
 ```bash
 # Execute with localhost
 ./evaluation/vllm_porting.sh
+```
+  (Run with `localhost`)
+ 
+### 3. **Evaluate captions with LLM-as-a-Judge**  
+   Execute `CapEval_QAs_save.py` to score the generated captions using MCQA-based evaluation.
+
+---
+
+## Citation
+
+If you find this repository useful in your research, please cite:
+
+```bibtex
+@article{oh2026covip,
+  title={Contextualized Visual Personalization in Vision-Language Models},
+  author={Oh, Yeongtak and Yu, Sangwon and Park, Junsung and Moon, Han Cheol and Mok, Jisoo and Yoon, Sungroh},
+  journal={arXiv preprint arXiv:2602.03454},
+  year={2026}
+}
+```
+
+---
+
+## Acknowledgements
+
+We gratefully acknowledge the following open-source repositories and resources that supported our work:
+
+- https://github.com/oyt9306/RePIC/blob/main/README.md  
+- https://github.com/QwenLM/Qwen3-VL
