@@ -67,5 +67,5 @@ If you find this repository useful in your research, please cite:
 
 We gratefully acknowledge the following open-source repositories and resources that supported our work:
 
-- https://github.com/oyt9306/RePIC/blob/main/README.md  
+- https://github.com/oyt9306/RePIC
 - https://github.com/QwenLM/Qwen3-VL
