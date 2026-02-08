@@ -53,7 +53,7 @@ After generating the captions, execute the porting script for the vLLM environme
 If you find this repository useful in your research, please cite:
 
 ```bibtex
-@article{oh2026covip,
+@article{oh2026contextualized,
   title={Contextualized Visual Personalization in Vision-Language Models},
   author={Oh, Yeongtak and Yu, Sangwon and Park, Junsung and Moon, Han Cheol and Mok, Jisoo and Yoon, Sungroh},
   journal={arXiv preprint arXiv:2602.03454},
