@@ -53,12 +53,13 @@ After generating the captions, execute the porting script for the vLLM environme
 ## 📦 Dataset Configuration
 
 We release the train and test splits of the personalized image captioning benchmark used for training CoViP.
-	•	Hugging Face Dataset:
-Yeongtak/benchmark_CoViP_captioning
 
 In addition, to support human-centric personalization scenarios, we provide an additional person-only benchmark dataset.
-	•	Hugging Face Dataset:
-Yeongtak/benchmark_person_pmmlm_v2
+
+* **Hugging Face Dataset Repository Names**
+    * **1) Personalized Image Captioning**: `Yeongtak/benchmark_CoViP_captioning`
+    * **2) Person-only Personalized Image Captioning**: `Yeongtak/benchmark_person_pmmlm_v2`
+
 
 ✨ Both datasets are intended for research purposes, and you are very welcome to use them in your work.
 If you have questions or suggestions, feel free to open an issue!
