@@ -27,7 +27,49 @@ To address this issue, we propose **CoViP**, a unified framework that treats per
 
 ## 📅 Do-lists
 - [x] We released evaluation codes for personalized image captioning!
-- [ ] Training codes are under construction.
+- [x] We released training codes for CoViP!
+
+---
+
+## 🔧 Training
+
+To train the model, please follow the setup and configuration used in the **`VLM-R1-Qwen3`** branch.
+
+### 📦 Training Data
+
+The following data files are required for training:
+
+- **JSON configuration file**  
+  https://drive.google.com/file/d/1gdH8HnkIra5P_eFoMuBDaqqVu9jM72V4/view?usp=sharing
+
+- **Training dataset file**  
+  https://drive.google.com/file/d/1Vgl3vSQXHzgB9sTW03H7KQxJk8a8peln/view?usp=sharing
+
+### ⚙️ Data Configuration
+
+1. Download the JSON file and place it in your local data directory.
+2. Update the dataset path by adding the appropriate prefix in the following configuration file:
+
+```bash
+VLM-R1-Qwen3/src/open-r1-multimodal/data_config/pmllm.yaml
+```
+Ensure that the paths correctly point to the downloaded JSON and training data files.
+
+
+Training is performed using on-policy reinforcement learning algorithms.
+	1.	Navigate to the run script directory:
+
+  ```bash
+  VLM-R1-Qwen3/src/open-r1-multimodal/run_scripts
+  ```
+
+  2.	Select and execute the training script corresponding to your desired on-policy RL algorithm (e.g., GRPO, DrGRPO, GSPO).
+
+Each script is pre-configured for a specific training setup; adjust hyperparameters as needed before execution.
+
+📌 Notes
+	•	Make sure the environment setup follows the instructions provided in the VLM-R1-Qwen3 branch.
+	•	Training scripts assume that the dataset configuration has been correctly updated in pmllm.yaml.
 
 ---
 
