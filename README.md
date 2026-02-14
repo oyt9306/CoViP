@@ -39,11 +39,9 @@ To train the model, please follow the setup and configuration used in the **`VLM
 
 The following data files are required for training:
 
-- **JSON configuration file**
-  [![Google Drive](https://img.shields.io/badge/Google%20Drive-JSON-blue)](https://drive.google.com/file/d/1gdH8HnkIra5P_eFoMuBDaqqVu9jM72V4/view?usp=sharing) 
+- **JSON configuration file** [![Google Drive](https://img.shields.io/badge/Google%20Drive-JSON-blue)](https://drive.google.com/file/d/1gdH8HnkIra5P_eFoMuBDaqqVu9jM72V4/view?usp=sharing) 
 
-- **Training dataset file**  
-  [![Google Drive](https://img.shields.io/badge/Google%20Drive-Training_data-blue)](https://drive.google.com/file/d/1Vgl3vSQXHzgB9sTW03H7KQxJk8a8peln/view?usp=sharing) 
+- **Training dataset file** [![Google Drive](https://img.shields.io/badge/Google%20Drive-Training_data-blue)](https://drive.google.com/file/d/1Vgl3vSQXHzgB9sTW03H7KQxJk8a8peln/view?usp=sharing) 
   
 
 ### ⚙️ Data Configuration
