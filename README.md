@@ -5,7 +5,9 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-2602.03454-b31b1b.svg)](https://arxiv.org/abs/2602.03454) 
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-CoViP_Model-yellow)](https://huggingface.co/Yeongtak/CoViP-Qwen3-VL-8B-GSPO) 
-[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-yellow)](https://huggingface.co/datasets/Yeongtak/benchmark_contextualized_pmllm_v2) 
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Full_Dataset-yellow)](https://huggingface.co/datasets/Yeongtak/benchmark_person_pmmlm_v2) 
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Person_Dataset-yellow)](https://huggingface.co/datasets/Yeongtak/benchmark_CoViP_captioning) 
+
 [![Google Drive](https://img.shields.io/badge/Google%20Drive-Test_Dataset-blue)](https://drive.google.com/file/d/1Ma2g1oSzl8ya0A-wJXMhPHekGLPqlvnW/view?usp=sharing) 
 
 <p align="center">
@@ -45,6 +47,21 @@ After generating the captions, execute the porting script for the vLLM environme
  
 ### 3. **Evaluate captions with LLM-as-a-Judge**  
    Execute `CapEval_QAs_save.py` to score the generated captions using MCQA-based evaluation.
+
+---
+
+## 📦 Dataset Configuration
+
+We release the train and test splits of the personalized image captioning benchmark used for training CoViP.
+	•	Hugging Face Dataset:
+Yeongtak/benchmark_CoViP_captioning
+
+In addition, to support human-centric personalization scenarios, we provide an additional person-only benchmark dataset.
+	•	Hugging Face Dataset:
+Yeongtak/benchmark_person_pmmlm_v2
+
+✨ Both datasets are intended for research purposes, and you are very welcome to use them in your work.
+If you have questions or suggestions, feel free to open an issue!
 
 ---
 
