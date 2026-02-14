@@ -39,11 +39,12 @@ To train the model, please follow the setup and configuration used in the **`VLM
 
 The following data files are required for training:
 
-- **JSON configuration file**  
-  https://drive.google.com/file/d/1gdH8HnkIra5P_eFoMuBDaqqVu9jM72V4/view?usp=sharing
+- **JSON configuration file**
+  [![Google Drive](https://img.shields.io/badge/Google%20Drive-JSON-blue)](https://drive.google.com/file/d/1gdH8HnkIra5P_eFoMuBDaqqVu9jM72V4/view?usp=sharing) 
 
 - **Training dataset file**  
-  https://drive.google.com/file/d/1Vgl3vSQXHzgB9sTW03H7KQxJk8a8peln/view?usp=sharing
+  [![Google Drive](https://img.shields.io/badge/Google%20Drive-Training_data-blue)](https://drive.google.com/file/d/1Vgl3vSQXHzgB9sTW03H7KQxJk8a8peln/view?usp=sharing) 
+  
 
 ### ⚙️ Data Configuration
 
@@ -57,7 +58,8 @@ Ensure that the paths correctly point to the downloaded JSON and training data f
 
 
 Training is performed using on-policy reinforcement learning algorithms.
-	1.	Navigate to the run script directory:
+
+  1.	Navigate to the run script directory:
 
   ```bash
   VLM-R1-Qwen3/src/open-r1-multimodal/run_scripts
