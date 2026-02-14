@@ -57,8 +57,9 @@ We release the train and test splits of the personalized image captioning benchm
 In addition, to support human-centric personalization scenarios, we provide an additional person-only benchmark dataset.
 
 * **Hugging Face Dataset Repository Names**
-    * **1) Personalized Image Captioning**: `Yeongtak/benchmark_CoViP_captioning`
-    * **2) Person-only Personalized Image Captioning**: `Yeongtak/benchmark_person_pmmlm_v2`
+    * **1) Personalized Image Captioning**: 🔗 [Yeongtak/benchmark_CoViP_captioning](https://huggingface.co/datasets/Yeongtak/benchmark_CoViP_captioning)
+      
+    * **2) Person-only Personalized Image Captioning**: 🔗 [Yeongtak/benchmark_person_pmmlm_v2](https://huggingface.co/datasets/Yeongtak/benchmark_person_pmmlm_v2)
 
 
 ✨ Both datasets are intended for research purposes, and you are very welcome to use them in your work.
