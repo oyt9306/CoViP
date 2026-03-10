@@ -118,6 +118,11 @@ In addition, to support human-centric personalization scenarios, we provide an a
 If you have questions or suggestions, feel free to open an issue!
 
 ---
+> ## Human evaluation template
+<p align="center">
+  <img src="./__assets__/human_eval_template.jpg" width="90%">
+</p>
+
 
 ## Citation
 
