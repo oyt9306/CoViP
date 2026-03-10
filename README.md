@@ -26,6 +26,7 @@ To address this issue, we propose **CoViP**, a unified framework that treats per
 ---
 
 ## 📅 Do-lists
+- [x] We provide the human evaluation code on our benchmark for research purposes!
 - [x] We released evaluation codes for personalized image captioning!
 - [x] We released training codes for CoViP!
 
@@ -117,6 +118,11 @@ In addition, to support human-centric personalization scenarios, we provide an a
 If you have questions or suggestions, feel free to open an issue!
 
 ---
+> ## Human evaluation template
+<p align="center">
+  <img src="./__assets__/human_eval_template.jpg" width="90%">
+</p>
+
 
 ## Citation
 
