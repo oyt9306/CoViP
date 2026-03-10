@@ -26,6 +26,7 @@ To address this issue, we propose **CoViP**, a unified framework that treats per
 ---
 
 ## 📅 Do-lists
+- [x] We provide the human evaluation code on our benchmark for research purposes!
 - [x] We released evaluation codes for personalized image captioning!
 - [x] We released training codes for CoViP!
 
