@@ -95,6 +95,10 @@ After generating the captions, execute the porting script for the vLLM environme
 ### 3. **Evaluate captions with LLM-as-a-Judge**  
    Execute `CapEval_QAs_save.py` to score the generated captions using MCQA-based evaluation.
 
+### 4. Qualitative Example (Figure 1)
+The following notebook provides a qualitative example that reproduces Figure 1 from the paper.
+- `figure1_example.ipynb`
+
 ---
 
 ## 📦 Dataset Configuration
