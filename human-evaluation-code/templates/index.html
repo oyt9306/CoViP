@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Caption Preference</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+
+      --shadow: 0 1px 2px rgba(0, 0, 0, .05);
+      --r-lg: 14px;
+      --r-md: 12px;
+
+      --gap: 14px;
+      --pad: 12px;
+
+      --topbar-h: 64px;
+      --vote-h: 110px;
+      /* 하단 투표바 높이 (필요시 조절) */
+      --img-h: 200px;
+      /* 공통 이미지 높이 (원하는 값으로) */
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ================= Topbar ================= */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      height: var(--topbar-h);
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      gap: 12px;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .topbar .subtitle {
+      margin: 2px 0 0 0;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .pill {
+      font-size: 13px;
+      font-weight: 800;
+      color: #374151;
+      background: #f3f4f6;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    /* ================= Main (3 columns) ================= */
+    .wrap {
+      /* 하단 고정 투표바만큼 아래 여백 확보 */
+      padding: var(--gap);
+      padding-bottom: calc(var(--vote-h) + var(--gap));
+      box-sizing: border-box;
+    }
+
+    .board {
+      height: calc(100vh - var(--topbar-h) - var(--gap) * 2 - var(--vote-h));
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.35fr;
+      /* query 약간 넓게 */
+      gap: var(--gap);
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow);
+      padding: var(--pad);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      /* 중요: 내부 스크롤을 위해 */
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 900;
+      margin: 0 0 10px 0;
+      color: #111827;
+    }
+
+    .media-row {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .img {
+      width: 100%;
+      height: var(--img-h);
+      /* 핵심: 높이 고정 */
+      object-fit: contain;
+      /* 비율 유지 + 크롭 */
+      border: 1px solid #eee;
+      border-radius: var(--r-md);
+      background: #fff;
+      display: block;
+    }
+
+    /* draft처럼 왼쪽 컨텍스트 이미지 크게 */
+    .img-context {
+      width: 240px;
+      max-width: 50%;
+    }
+
+    /* query 이미지 */
+    .img-query {
+      height: 250px;
+      width: 240px;
+      max-width: 100%;
+    }
+
+    .subhead {
+      margin: 10px 0 6px 0;
+      font-size: 12px;
+      font-weight: 800;
+      color: #374151;
+    }
+
+    .box {
+      background: #fafafa;
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      padding: 10px;
+      font-size: 13px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 0;
+    }
+
+    /* 페이지 스크롤 줄이기: 카드 내부에서만 스크롤 */
+    .scroll {
+      overflow: auto;
+    }
+
+    /* context dialogue 높이: 이미지 아래 영역을 크게 쓰되, 넘치면 내부 스크롤 */
+    .dialogue {
+      flex: 1;
+      min-height: 0;
+      max-height: 100%;
+    }
+
+    /* query captions 영역 */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .query-card {
+      min-height: 0;
+    }
+
+    .query-card .cap-grid {
+      flex: 1;
+      /* 남는 공간을 캡션 그리드가 먹음 */
+      min-height: 0;
+    }
+
+    .query-card .cap-grid>div {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .query-card .cap-box {
+      flex: 1;
+      /* 각 캡션 박스가 컬럼 높이를 먹음 */
+      min-height: 0;
+      height: auto;
+      /* 기존 height:165px 제거 */
+      overflow: auto;
+    }
+
+
+    /* ================= Dialogue speaker style (간격 강화) ================= */
+    .markdown {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .markdown p {
+      margin: 3px 0;
+    }
+
+    .markdown ul {
+      padding-left: 18px;
+      margin: 6px 0;
+    }
+
+    .dlg-line {
+      display: block;
+      padding: 3px 4px;
+      border-radius: 12px;
+      margin: 7px 0;
+      /* 간격 더 크게 */
+      border: 0px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .dlg-line.user {
+      background: #eef2ff;
+      border-left: 4px solid #6366f1;
+    }
+
+    .dlg-line.model {
+      background: #ecfeff;
+      border-left: 4px solid #06b6d4;
+    }
+
+    .dlg-speaker {
+      font-weight: 900;
+      margin-right: 6px;
+    }
+
+    /* ================= Fixed Vote Bar ================= */
+    .votebar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 40;
+      background: #fff;
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.06);
+      height: var(--vote-h);
+      box-sizing: border-box;
+      padding: 6px 8px;
+    }
+
+    .vote-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 180px;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .qcard {
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 10px 12px;
+      background: #ffffff;
+      min-height: 0;
+    }
+
+    .qtitle {
+      font-size: 12px;
+      font-weight: 900;
+      margin: 0 0 6px 0;
+    }
+
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      cursor: pointer;
+      user-select: none;
+      background: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .choice input {
+      transform: scale(1.05);
+    }
+
+    .btn {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      border-radius: var(--r-lg);
+      background: #111827;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    /* ================= Responsive ================= */
+    @media (max-width: 1200px) {
+      :root {
+        --vote-h: 110px;
+      }
+
+      .board {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+
+      .cap-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .vote-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .btn {
+        height: 44px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div>
+      <h1>Hello, {{ session['name'] }}</h1>
+      <div class="subtitle">
+        You are asked to select the most appropriate caption that best satisfies the given questions based on the
+        provided context.
+      </div>
+    </div>
+    <div class="pill">{{ session['total_count'] }} / {{ session.get('total_max', 45) }}</div>
+  </div>
+
+  <div class="wrap">
+    <div class="board">
+      <!-- Context 1 -->
+      <section class="card">
+        <div class="card-title">Image 1 in the context</div>
+        <div class="media-row">
+          <img class="img img-context" src="{{ url_for('static', filename=img1) }}" alt="Context Image 1" />
+        </div>
+
+        <div class="subhead">Dialogue 1 for Image 1 in the context</div>
+        <div class="box dialogue scroll markdown" data-md="{{ desc1 | e }}"></div>
+      </section>
+
+      <!-- Context 2 -->
+      <section class="card">
+        <div class="card-title">Image 2 in the context</div>
+        <div class="media-row">
+          <img class="img img-context" src="{{ url_for('static', filename=img2) }}" alt="Context Image 2" />
+        </div>
+
+        <div class="subhead">Dialogue 2 for Image 2 in the context</div>
+        <div class="box dialogue scroll markdown" data-md="{{ desc2 | e }}"></div>
+      </section>
+
+      <!-- Query -->
+      <section class="card query-card">
+        <div class="card-title">New Image (Query) – Model should generate caption for New Image, referring to the given
+          context</div>
+        <img class="img img-query" src="{{ url_for('static', filename=img3) }}" alt="Query Image" />
+
+        <div class="cap-grid">
+          <div>
+            <div class="subhead">Generated caption A</div>
+            <div class="box cap-box">{{ line3 }}</div>
+          </div>
+          <div>
+            <div class="subhead">Generated caption B</div>
+            <div class="box cap-box">{{ line4 }}</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Fixed vote bar -->
+  <div class="votebar">
+    <form class="vote-inner" action="/vote" method="post">
+      <input type="hidden" name="sample_id" value="{{ session.get('sample_id', '') }}">
+      <input type="hidden" name="img1" value="{{ img1 }}">
+      <input type="hidden" name="img2" value="{{ img2 }}">
+      <input type="hidden" name="img3" value="{{ img3 }}">
+
+      <div class="qcard">
+        <div class="qtitle">
+          Q1. Which caption accurately and in detail recalls the objects,
+          mentioned in the context and also shown in New Image?
+        </div>
+        <div class="choices">
+          <label class="choice" for="context_upper">
+            <input type="radio" id="context_upper" name="context_groundedness" value="line3###line4" required>
+            Caption A
+          </label>
+          <label class="choice" for="context_lower">
+            <input type="radio" id="context_lower" name="context_groundedness" value="line4###line3" required>
+            Caption B
+          </label>
+          <label class="choice" for="context_tie">
+            <input type="radio" id="context_tie" name="context_groundedness" value="tie" required>
+            Tie
+          </label>
+        </div>
+      </div>
+
+      <div class="qcard">
+        <div class="qtitle">
+          Q2. Which caption accurately describes the visual content of New Image?
+        </div>
+        <div class="choices">
+          <label class="choice" for="newimg_upper">
+            <input type="radio" id="newimg_upper" name="new_image_description" value="line3###line4" required>
+            Caption A
+          </label>
+          <label class="choice" for="newimg_lower">
+            <input type="radio" id="newimg_lower" name="new_image_description" value="line4###line3" required>
+            Caption B
+          </label>
+          <label class="choice" for="newimg_tie">
+            <input type="radio" id="newimg_tie" name="new_image_description" value="tie" required>
+            Tie
+          </label>
+        </div>
+      </div>
+
+      <button class="btn" type="submit">Next</button>
+    </form>
+  </div>
+
+  <!-- Markdown renderer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    function stylizeDialogue(root) {
+      root.querySelectorAll("p, li").forEach(block => {
+        const parts = block.innerHTML.split(/<br\s*\/?>/i);
+        const hasDialogue = parts.some(p => {
+          const t = p.trim();
+          return t.startsWith("User:") || t.startsWith("Model:");
+        });
+        if (!hasDialogue) return;
+
+        const wrapped = parts.map(p => {
+          const t = p.trim();
+          if (t.startsWith("User:")) return `<span class="dlg-line user">${p}</span>`;
+          if (t.startsWith("Model:")) return `<span class="dlg-line model">${p}</span>`;
+          return p;
+        });
+
+        block.innerHTML = wrapped.join("");
+
+        block.querySelectorAll(".dlg-line").forEach(span => {
+          span.innerHTML = span.innerHTML
+            .replace(/^\s*User:\s*/, '<span class="dlg-speaker">User:</span>')
+            .replace(/^\s*Model:\s*/, '<span class="dlg-speaker">Model:</span>');
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      marked.setOptions({ breaks: true });
+      document.querySelectorAll(".markdown").forEach(el => {
+        // const md = el.dataset.md || "";
+        let md = el.dataset.md || "";
+
+        // ✅ 맨 앞의 "**Dialogue:**" 라벨 제거 (있을 때만)
+        md = md.replace(/^\s*\*\*Dialogue:\*\*\s*\n?/i, "");
+        el.innerHTML = marked.parse(md);
+        stylizeDialogue(el);
+      });
+    });
+  </script>
+</body>
+
+</html>

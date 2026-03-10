@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Survey</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 0 20px;
+            line-height: 1.7;
+            color: #333;
+            background-color: #fefefe;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Thank you for participating in our survey!</h1>
+
+    <p>
+        In this study, you will evaluate how well a model generates a <b>personalized caption</b>
+        for a new image by using information from the given context of prior visual dialogues.
+    </p>
+
+    <hr style="margin: 18px 0;" />
+
+    <h2>Step 1. Review the Context (Shared Memory)</h2>
+
+    <p>
+        You will first be shown <b>two image–dialogue pairs</b> in the context.
+        Each pair consists of:
+    </p>
+
+    <ul>
+        <li>An image</li>
+        <li>A dialogue between a <b>User</b> and a <b>Model</b> about objects in that image</li>
+    </ul>
+
+    <p>
+        These dialogues represent the User’s <b>past experiences and memories</b>.
+        You should treat them as <b>contextual knowledge</b> that the model may later refer to.
+    </p>
+
+    <hr style="margin: 18px 0;" />
+
+    <h2>Step 2. Review the New Image and Candidate Captions</h2>
+
+    <p>
+        Next, you will be shown a <b>new query image</b> that may include
+        objects discussed in the past dialogues.
+    </p>
+
+    <p>
+        For this new image, the model has generated <b>two candidate captions (A and B)</b>.
+    </p>
+
+    <hr style="margin: 18px 0;" />
+
+    <h2>Your Task</h2>
+
+    <p>
+        Your task is to choose the caption that is <b>more appropriate overall</b>,
+        based on the following two criteria:
+    </p>
+
+    <ol>
+        <li>
+            <b>Context Awareness:</b><br />
+            How well does the caption correctly reference and use information from the past dialogues
+            when describing objects in the new image?
+            <br />
+            (e.g., names, personalities, prior experiences, relationships)
+        </li>
+        <br />
+        <li>
+            <b>Image Description Quality:</b><br />
+            How accurately and naturally does the caption describe the visual content of the new image itself?
+        </li>
+    </ol>
+
+    <p>
+        Please consider <b>both criteria together</b> and select the caption that matches for contextual personalization
+        and visual description.
+    </p>
+
+    <p>
+        <b>There is no objectively correct answer — we are interested in your judgment.</b>
+    </p>
+
+    </ul>
+
+    <p>
+        Your feedback will help us assess our method!
+    </p>
+
+    <br />
+    <p>Please enter your name and enter the "Start" button</p>
+    <form action="/" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <button type="submit">Start</button>
+    </form>
+</body>
+
+</html>
