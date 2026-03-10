@@ -31,6 +31,11 @@ To address this issue, we propose **CoViP**, a unified framework that treats per
 
 ---
 
+## Installation Guide
+
+Our codebase has been tested with **CUDA 12.8**.  
+For detailed setup instructions, please refer to the installation guide in the [Qwen3-VL repository](https://github.com/QwenLM/Qwen3-VL).
+
 ## 🔧 Training
 
 To train the model, please follow the setup and configuration used in the **`VLM-R1-Qwen3`** branch.
