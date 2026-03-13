@@ -1,28 +1,13 @@
 import os
-import torch
-import torch.nn as nn
-
-import numpy as np
 import json
 from tqdm import tqdm
 
 import huggingface_hub
 
-from transformers import (
-    AutoConfig,
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    AutoModel,
-    BitsAndBytesConfig,
-    StoppingCriteria,
-    StoppingCriteriaList,
-    GenerationConfig,
-    AutoProcessor,
-)
+from transformers import AutoTokenizer
 
 from vllm import LLM, SamplingParams
 
-from typing import List, Optional, Tuple
 import random
 import copy
 import argparse
@@ -68,7 +53,7 @@ def shuffle_qa_options_abc(qa):
 prompt_qagen = """You are an AI model that creates factual multiple-choice questions and answers.
 
 [Input]
-You are given a conversation between a user and an AI model about a specific object (person, animal, item, or place). The conversation contains objective details such as the object’s name, location, time, or the user’s related experiences.
+You are given a conversation between a user and an AI model about a specific object (person, animal, item, or place). The conversation contains objective details such as the object's name, location, time, or the user's related experiences.
 
 [Goal]
 Generate 3 multiple-choice QA pairs that could later be answered by someone who only has access to a caption describing a new image of the same object (the original conversation will NOT be shown at evaluation time).
@@ -141,10 +126,9 @@ def main():
         max_tokens=16384,
     )
 
-    with open(f"dials_concepts_{data_path.split("/")[-1]}.json") as f:
+    with open(f"dials_concepts_{data_path.split('/')[-1]}.json") as f:
         dials = json.load(f)
 
-    data_size = len(os.listdir((data_path)))
     ctx_len = len(os.listdir(f"{data_path}/sample_0/concepts"))
     qa_text = []
     qa_json = []
@@ -199,12 +183,13 @@ def main():
             except Exception:
                 qa_json_final[-1].append("Error")
 
-    save_path = f"qa_concepts_{data_path.split("/")[-1]}.json"
+    save_path = f"qa_concepts_{data_path.split('/')[-1]}.json"
     with open(save_path, "w") as f:
         json.dump(qa_json_final, f)
 
 if __name__ == "__main__":
     os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
-    HF_TOKEN = "your_huggingface_token_here"
-    huggingface_hub.login(token=HF_TOKEN)
+    hf_token = os.environ.get("HF_TOKEN")
+    if hf_token:
+        huggingface_hub.login(token=hf_token)
     main()

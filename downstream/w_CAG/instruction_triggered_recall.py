@@ -1,23 +1,16 @@
 import os
-import torch
-import torch.nn as nn
-
-import numpy as np
 import json
+import numpy as np
 from tqdm import tqdm
 
 import huggingface_hub
 
-from transformers import (
-    AutoProcessor,
-)
+from transformers import AutoProcessor
 
-from datasets import load_dataset, load_from_disk
+from datasets import load_dataset
 from vllm import LLM, SamplingParams
 from qwen_vl_utils import process_vision_info
 
-from typing import List, Optional, Tuple
-import re
 import argparse
 
 
@@ -25,14 +18,13 @@ def prepare_inputs_for_vllm(messages, processor):
     text = processor.apply_chat_template(
         messages, tokenize=False, add_generation_prompt=True, add_vision_id=True
     )
-    # qwen_vl_utils 0.0.14+ reqired
+    # qwen_vl_utils 0.0.14+ required
     image_inputs, video_inputs, video_kwargs = process_vision_info(
         messages,
         image_patch_size=processor.image_processor.patch_size,
         return_video_kwargs=True,
         return_video_metadata=True,
     )
-    # print(f"video_kwargs: {video_kwargs}")
 
     mm_data = {}
     if image_inputs is not None:
@@ -65,11 +57,11 @@ Follow these rules carefully:
    - Treat the previous dialogues as your long-term memory.
    - If an object in the new image appears similar to one mentioned in the past, refer to it using the same name and contextual background.
 
-2. **Ground your description in the new image’s visual content.**
+2. **Ground your description in the new image's visual content.**
    - Accurately describe what you see: composition, setting, lighting, and object state.
-   - Then integrate remembered details from the context naturally (e.g., “This looks like Pino again, perhaps older than in the park photo from Busan Station.”).
+   - Then integrate remembered details from the context naturally (e.g., "This looks like Pino again, perhaps older than in the park photo from Busan Station.").
 
-3. Keep your tone natural and human-like — as if you’re describing something familiar to the same user.
+3. Keep your tone natural and human-like — as if you're describing something familiar to the same user.
 
 4. Do not restate previous dialogues verbatim. Instead, synthesize and extend them with new image-grounded observations.
 
@@ -89,7 +81,7 @@ These conversations describe specific objects (people, animals, items, or places
 This entire context represents your prior shared experiences with the user.
 
 [Task]
-Now, you are given a **new image** that may includ e one or more of the same objects mentioned in the previous dialogues.
+Now, you are given a **new image** that may include one or more of the same objects mentioned in the previous dialogues.
 Your goal is to interpret this new image by integrating relevant information from the context.
 
 Follow these rules carefully:
@@ -98,11 +90,11 @@ Follow these rules carefully:
    - Treat the previous dialogues as your long-term memory.
    - If an object in the new image appears similar to one mentioned in the past, refer to it with the same name or contextual background.
 
-2. **Ground your understanding in the new image’s visual content.**
+2. **Ground your understanding in the new image's visual content.**
    - Accurately recognize what you see: composition, setting, lighting, actions, and object state.
-   - Then integrate relevant remembered details naturally (e.g., “This looks like Pino again, now indoors instead of the park near Busan Station.”).
+   - Then integrate relevant remembered details naturally (e.g., "This looks like Pino again, now indoors instead of the park near Busan Station.").
 
-3. Keep your tone natural and human-like — as if you’re interpreting something familiar to the same user.
+3. Keep your tone natural and human-like — as if you're interpreting something familiar to the same user.
 
 4. Do not restate previous dialogues verbatim. Instead, reason by synthesizing memory with the current image content.
 
@@ -117,19 +109,20 @@ Follow these rules carefully:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--hf_token", type=str, default="your_huggingface_token_here"
+        "--hf_token", type=str, default=None
     )
     parser.add_argument("--model_id", type=str, default="Yeongtak/CoViP-Qwen3-VL-8B-GSPO")
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--data_path", type=str, default="Yeongtak/itr")
     args = parser.parse_args()
 
-    hf_token = args.hf_token
+    hf_token = args.hf_token or os.environ.get("HF_TOKEN")
     model_id = args.model_id
     batch_size = args.batch_size
     data_path = args.data_path
 
-    huggingface_hub.login(token=hf_token)
+    if hf_token:
+        huggingface_hub.login(token=hf_token)
 
     model = LLM(
         model=model_id,

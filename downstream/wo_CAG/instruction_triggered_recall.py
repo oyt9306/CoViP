@@ -1,31 +1,16 @@
 import os
-import torch
-import torch.nn as nn
-
-import numpy as np
 import json
+import numpy as np
 from tqdm import tqdm
 
 import huggingface_hub
 
-from transformers import (
-    AutoConfig,
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    AutoModel,
-    BitsAndBytesConfig,
-    StoppingCriteria,
-    StoppingCriteriaList,
-    GenerationConfig,
-    AutoProcessor,
-)
+from transformers import AutoProcessor
 
-from datasets import load_dataset, load_from_disk
+from datasets import load_from_disk
 from vllm import LLM, SamplingParams
 from qwen_vl_utils import process_vision_info
 
-from typing import List, Optional, Tuple
-import re
 import argparse
 
 
@@ -33,14 +18,13 @@ def prepare_inputs_for_vllm(messages, processor):
     text = processor.apply_chat_template(
         messages, tokenize=False, add_generation_prompt=True, add_vision_id=True
     )
-    # qwen_vl_utils 0.0.14+ reqired
+    # qwen_vl_utils 0.0.14+ required
     image_inputs, video_inputs, video_kwargs = process_vision_info(
         messages,
         image_patch_size=processor.image_processor.patch_size,
         return_video_kwargs=True,
         return_video_metadata=True,
     )
-    # print(f"video_kwargs: {video_kwargs}")
 
     mm_data = {}
     if image_inputs is not None:
@@ -97,7 +81,7 @@ These conversations describe specific objects (people, animals, items, or places
 This entire context represents your prior shared experiences with the user.
 
 [Task]
-Now, you are given a **new image** that may includ e one or more of the same objects mentioned in the previous dialogues.
+Now, you are given a **new image** that may include one or more of the same objects mentioned in the previous dialogues.
 Your goal is to interpret this new image by integrating relevant information from the context.
 
 Follow these rules carefully:
@@ -125,19 +109,20 @@ Follow these rules carefully:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--hf_token", type=str, default="your_huggingface_token_here"
+        "--hf_token", type=str, default=None
     )
     parser.add_argument("--model_id", type=str, default="Yeongtak/CoViP-Qwen3-VL-8B-GSPO")
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--data_path", type=str, default="Yeongtak/itr")
     args = parser.parse_args()
 
-    hf_token = args.hf_token
+    hf_token = args.hf_token or os.environ.get("HF_TOKEN")
     model_id = args.model_id
     batch_size = args.batch_size
     data_path = args.data_path
 
-    huggingface_hub.login(token=hf_token)
+    if hf_token:
+        huggingface_hub.login(token=hf_token)
 
     model = LLM(
         model=model_id,

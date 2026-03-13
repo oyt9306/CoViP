@@ -12,47 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# import debugpy
-# try:
-#     # 5678 is the default attach port in the VS Code debug configurations. Unless a host and port are specified, host defaults to 127.0.0.1
-#     debugpy.listen(("localhost", 9501))
-#     print("Waiting for debugger attach")
-#     debugpy.wait_for_client()
-# except Exception as e:
-#     pass
-
 import os
 import re
-from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Optional
 
 from PIL import Image
 from torch.utils.data import Dataset
-from transformers import Qwen2VLForConditionalGeneration
 
 from math_verify import parse, verify
 from open_r1.trainer import DrVLMGRPOTrainer, GRPOConfig
 from open_r1.vlm_modules import *
+from open_r1.qwen2_5vl_monkey_patch import monkey_patch_qwen2_5vl_forward
 from trl import ModelConfig, ScriptArguments, TrlParser, get_peft_config
-from transformers import TrainingArguments
 import yaml
 import json
 import random
 import math
 
-# from open_r1.qwen2_5vl_monkey_patch import monkey_patch_qwen2_5vl_flash_attn, monkey_patch_qwen2_5vl_forward
-# monkey_patch_qwen2_5vl_flash_attn()
 from faker import Faker
 
 
 fake_app = Faker(['ko_KR', 'es_ES'])
-
-def return_answer(a1, a):
-    if a in a1:
-        return 1 
-    else:
-        return 0
 
 def return_random_prompt():
     name = fake_app.name()
@@ -188,7 +169,6 @@ class LazySupervisedDataset(Dataset):
         super(LazySupervisedDataset, self).__init__()
         self.script_args = script_args
         self.list_data_dict = []
-        # self.question_template = question_template
 
         if data_path.endswith(".yaml"):
             with open(data_path, "r") as file:
@@ -278,7 +258,6 @@ class LazySupervisedDataset(Dataset):
 
             len_concept = example['c_num']
 
-            # ✅ 위 → 아래 순서대로 append
             for idx in range(len_concept):
                 empty_text = return_text(idx + 1)
                 empty_diag = return_dialogue(example['dialogues'][idx])
@@ -287,7 +266,6 @@ class LazySupervisedDataset(Dataset):
                 template["prompt"][0]['content'].append(empty_image.copy())
                 template["prompt"][0]['content'].append(empty_diag)
 
-            # 마지막에 problem 추가
             template["prompt"][-1]['content'].append(empty_image.copy())
             template["prompt"][-1]['content'].append(
                 {"type": "text", "text": problem}
@@ -311,13 +289,11 @@ class LazySupervisedDataset(Dataset):
 
             len_concept = example['c_num']
 
-            # ✅ 위 → 아래 순서대로 append
             for idx in range(len_concept):
                 empty_text = return_text(idx)
                 template["prompt"][0]['content'].append(empty_text)
                 template["prompt"][0]['content'].append(empty_image.copy())
 
-            # 마지막에 problem 추가
             template["prompt"][-1]['content'].append(
                 {"type": "text", "text": problem}
             )
@@ -326,12 +302,9 @@ class LazySupervisedDataset(Dataset):
             return template
         
         example = self.list_data_dict[i]
-        # assert 'image' in example
-
         image_root = self.script_args.image_root
         name, naming_prompts = return_random_prompt()
-        
-       # print(example['image']) os.path.join(image_root, img) for 
+
         if isinstance(example['images'], list):
             image_path = [img for img in example['images']]
             image = [Image.open(PATH).convert("RGB") for PATH in image_path]

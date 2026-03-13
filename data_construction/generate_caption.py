@@ -1,45 +1,30 @@
 import os
-import torch
-import torch.nn as nn
-
-import numpy as np
 import json
 from tqdm import tqdm
 
 import huggingface_hub
 
-from transformers import (
-    AutoConfig,
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    AutoModel,
-    BitsAndBytesConfig,
-    StoppingCriteria,
-    StoppingCriteriaList,
-    GenerationConfig,
-    AutoProcessor,
-)
+from transformers import AutoProcessor
 
 from vllm import LLM, SamplingParams
 from qwen_vl_utils import process_vision_info
 
-from typing import List, Optional, Tuple
 import argparse
 
 # CUDA_VISIBLE_DEVICES=2 python generate_caption.py --batch_size 32 --data_path ./Benchmark/two
+
 
 def prepare_inputs_for_vllm(messages, processor):
     text = processor.apply_chat_template(
         messages, tokenize=False, add_generation_prompt=True, add_vision_id=True
     )
-    # qwen_vl_utils 0.0.14+ reqired
+    # qwen_vl_utils 0.0.14+ required
     image_inputs, video_inputs, video_kwargs = process_vision_info(
         messages,
         image_patch_size=processor.image_processor.patch_size,
         return_video_kwargs=True,
         return_video_metadata=True,
     )
-    # print(f"video_kwargs: {video_kwargs}")
 
     mm_data = {}
     if image_inputs is not None:
@@ -72,11 +57,11 @@ Follow these rules carefully:
    - Treat the previous dialogues as your long-term memory.
    - If an object in the new image appears similar to one mentioned in the past, refer to it using the same name and contextual background.
 
-2. **Ground your description in the new image’s visual content.**
+2. **Ground your description in the new image's visual content.**
    - Accurately describe what you see: composition, setting, lighting, and object state.
-   - Then integrate remembered details from the context naturally (e.g., “This looks like Pino again, perhaps older than in the park photo from Busan Station.”).
+   - Then integrate remembered details from the context naturally (e.g., "This looks like Pino again, perhaps older than in the park photo from Busan Station.").
 
-3. Keep your tone natural and human-like — as if you’re describing something familiar to the same user.
+3. Keep your tone natural and human-like — as if you're describing something familiar to the same user.
 
 4. Do not restate previous dialogues verbatim. Instead, synthesize and extend them with new image-grounded observations.
 
@@ -111,7 +96,7 @@ def main():
         stop_token_ids=[],
     )
 
-    with open(f"dials_concepts_{data_path.split("/")[-1]}.json") as f:
+    with open(f"dials_concepts_{data_path.split('/')[-1]}.json") as f:
         dials = json.load(f)
 
     data_size = len(os.listdir((data_path)))
@@ -172,13 +157,13 @@ def main():
         for k in range(len(outputs)):
             captions.append(outputs[k].outputs[0].text)
 
-    save_path = f"captions_{model_id.split("/")[-1]}_concepts_{data_path.split("/")[-1]}.json"
+    save_path = f"captions_{model_id.split('/')[-1]}_concepts_{data_path.split('/')[-1]}.json"
     with open(save_path, "w") as f:
         json.dump(captions, f)
 
 if __name__ == "__main__":
     os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
-
-    HF_TOKEN = "your_huggingface_token_here"
-    huggingface_hub.login(token=HF_TOKEN)
+    hf_token = os.environ.get("HF_TOKEN")
+    if hf_token:
+        huggingface_hub.login(token=hf_token)
     main()
