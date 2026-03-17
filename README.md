@@ -3,6 +3,12 @@
 **Authors**: Yeongtak Oh\*, Sangwon Yu\*, Junsung Park, Han Cheol Moon, Jisoo Mok, Sungroh Yoon
 (\*: Equal contribution)
 
+<p align="center">
+  <a href="https://oyt9306.github.io/covip.github.io" target="_blank">
+    <img src="https://img.shields.io/badge/🌐%20Project%20Page-CoViP-blue?style=for-the-badge" alt="Project Page"/>
+  </a>
+</p>
+
 [![arXiv](https://img.shields.io/badge/arXiv-2602.03454-b31b1b.svg)](https://arxiv.org/abs/2602.03454)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-CoViP_Model-yellow)](https://huggingface.co/Yeongtak/CoViP-Qwen3-VL-8B-GSPO)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Full_Dataset-yellow)](https://huggingface.co/datasets/Yeongtak/benchmark_CoViP_captioning)
