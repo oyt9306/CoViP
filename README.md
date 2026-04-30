@@ -1,4 +1,5 @@
 # CoViP: Contextualized Visual Personalization in Vision-Language Models
+# ICML 2026
 
 **Authors**: Yeongtak Oh\*, Sangwon Yu\*, Junsung Park, Han Cheol Moon, Jisoo Mok, Sungroh Yoon
 (\*: Equal contribution)
